@@ -1,0 +1,67 @@
+<div class="container-fluid">
+
+  <div class="row my-2">
+    <div class="col mx-auto text-center" *ngIf="compareResult">
+
+      <h3 class="text-danger" *ngIf="compareResult.plagiarismExists; else zEBlock">
+        Plagiarism detected!
+      </h3>
+      <ng-template #zEBlock>
+        <h3 class="text-success">No plagiarism</h3>
+      </ng-template>
+      <h5>Threshold used: {{compareResult.thresholdUsed}}</h5>
+
+      <div [ngSwitch]="strategy">
+        <div *ngSwitchCase="'Zhang-Shasha ALgorithm'">
+          <h5>Zhang-Shasha ALgorithm score: {{compareResult.metrics[0].score + '%'}}</h5>
+        </div>
+        <div *ngSwitchCase="'Longest Common Subsequence Algorithm'">
+          <h5>Longest Common Subsequence Algorithm score: {{compareResult.metrics[1].score + '%'}}</h5>
+        </div>
+        <div *ngSwitchDefault>
+          <h5>Weighted average score: {{compareResult.averageScore + '%'}}</h5>
+          <div class="table-responsive-sm jy-max-width-700 mx-auto">
+            <table class="table">
+              <thead>
+              <tr>
+                <th scope="col">Metric type</th>
+                <th scope="col">Score</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let metric of compareResult.metrics">
+                <td>{{metric.metricType}}</td>
+                <td>{{metric.score}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="row mb-2">
+    <div class="col-12 col-md-6">
+      <h5>File one: {{compareResult?.file1Name}}</h5>
+      <div ace-editor id="editor1" class="jy-ace-editor" [(text)]="text1" [mode]="'python'" [theme]="'eclipse'"
+           #editor1 [options]="options" [readOnly]="false" [autoUpdateContent]="true"></div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <h5>File two: {{compareResult?.file2Name}}</h5>
+      <div ace-editor id="editor2" class="jy-ace-editor" [(text)]="text2" [mode]="'python'" [theme]="'eclipse'"
+           #editor2 [options]="options" [readOnly]="false" [autoUpdateContent]="true"></div>
+    </div>
+    <!--<button class="btn btn-primary" (click)="markLines()"></button>-->
+  </div>
+
+  <div class="row mb-4">
+    <div class="col">
+      <p>* You can click on one colored code block, then the other panel will scroll to the matched block.
+      This can help you navigate through the detected similar code</p>
+    </div>
+  </div>
+</div>

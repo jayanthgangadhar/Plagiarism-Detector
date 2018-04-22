@@ -1,0 +1,104 @@
+<div class="container-fluid">
+
+  <div class="row mb-2">
+    <div class="col jy-max-width-1000 mx-auto text-center">
+      <h2 class="mb-4">Select two python folders for comparison</h2>
+      <div class="row mb-4">
+        <div class="col-12 col-md-6">
+          <form #f1="ngForm">
+            <div class="form-group row">
+              <label for="student1" class="col-3 col-form-label">Student one</label>
+              <div class="col-4">
+                <select class="form-control" id="student1" name="student1" [(ngModel)] = "student1" required>
+                  <option *ngFor="let s of students" [ngValue]="s">{{s.firstName + ' ' + s.lastName}}</option>
+                </select>
+              </div>
+              <label class="btn btn-secondary col-5 col-form-label" for="file1">Folder one</label>
+              <input (change)=fileEvent($event) name="file1" type="file" class="form-control"
+                      id="file1" accept=".py" webkitdirectory directory multiple hidden>
+            </div>
+          </form>
+          <ul class="list-group" *ngIf="fileListOne.length > 0">
+            <li class="list-group-item h6">{{fileListOne.length}} files selected</li>
+            <li class="list-group-item" *ngFor="let file of fileListOne">{{file.webkitRelativePath}}</li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-6">
+          <form #f2="ngForm">
+            <div class="form-group row">
+              <label for="student2" class="col-3 col-form-label">Student two</label>
+              <div class="col-4">
+                <select class="form-control" id="student2" name="student2" [(ngModel)] = "student2" required>
+                  <option *ngFor="let s of students" [ngValue]="s">{{s.firstName + ' ' + s.lastName}}</option>
+                </select>
+              </div>
+              <label class="btn btn-secondary col-5 col-form-label" for="file2">Folder two</label>
+              <input (change)=fileEvent($event) name="file2" type="file" class="form-control"
+                     id="file2" accept=".py" webkitdirectory directory multiple hidden>
+            </div>
+          </form>
+          <ul class="list-group" *ngIf="fileListTwo.length > 0">
+            <li class="list-group-item h6">{{fileListTwo.length}} files selected</li>
+            <li class="list-group-item" *ngFor="let file of fileListTwo">{{file.webkitRelativePath}}</li>
+          </ul>
+        </div>
+      </div>
+      <div *ngIf="errorFlag" class="alert alert-danger">
+        {{errorMsg}}
+      </div>
+      <div class="row jy-max-width-700 mx-auto">
+        <button (click)="uploadFolder()" class="btn btn-primary btn-block"
+                [disabled]="!f1.valid || !f2.valid ||compareBtnDisabled">Compare</button>
+        <p class="text-info" *ngIf="compareBtnDisabled">Compare in process, please wait....</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4" *ngIf="compareResult">
+    <div class="col jy-max-width-1000 mx-auto text-center">
+      <h3>Compare complete</h3>
+      <button class="btn btn-primary" (click)="viewDetail()">View Result</button>
+      <!--<div class="table-responsive-sm jy-max-width-700 mx-auto">-->
+        <!--<table class="table table-hover">-->
+          <!--<thead>-->
+          <!--<tr>-->
+            <!--<th scope="col">File 1</th>-->
+            <!--<th scope="col">File 2</th>-->
+            <!--<th scope="col">Average Score</th>-->
+          <!--</tr>-->
+          <!--</thead>-->
+          <!--<tbody>-->
+          <!--<tr *ngFor="let result of compareResult; let i = index" (click)="selectRow(i)" [class.table-active]="i === selectedIndex">-->
+            <!--<td>{{result.file1Name}}</td>-->
+            <!--<td>{{result.file2Name}}</td>-->
+            <!--<td>{{result.averageScore}}</td>-->
+          <!--</tr>-->
+          <!--</tbody>-->
+        <!--</table>-->
+      <!--</div>-->
+    </div>
+  </div>
+
+  <!--<div class="row mb-4" *ngIf="selectedResult">-->
+    <!--<div class="col mx-auto text-center">-->
+      <!--<h3>Average score: {{selectedResult.averageScore}}</h3>-->
+      <!--<div class="table-responsive-sm jy-max-width-700 mx-auto">-->
+        <!--<table class="table">-->
+          <!--<thead>-->
+          <!--<tr>-->
+            <!--<th scope="col">Metric type</th>-->
+            <!--<th scope="col">Score</th>-->
+          <!--</tr>-->
+          <!--</thead>-->
+          <!--<tbody>-->
+          <!--<tr *ngFor="let metric of selectedResult.metrics">-->
+            <!--<td>{{metric.metricType}}</td>-->
+            <!--<td>{{metric.score}}</td>-->
+          <!--</tr>-->
+          <!--</tbody>-->
+        <!--</table>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+</div>

@@ -1,0 +1,14 @@
+.jy-below-nav {
+  margin-top: 70px;
+}
+
+.bg-img {
+  background-image: url("../../../assets/pictures/python.png");
+  background-size: cover;
+  background-position: center;
+  height: 80vh;
+}
+
+.title-text {
+  background-color: rgba(255,255,255,0.4);
+}

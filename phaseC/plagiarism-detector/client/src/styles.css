@@ -1,0 +1,78 @@
+/* You can add global styles to this file, and also import other style files */
+.jy-max-width-700 {
+  max-width: 700px;
+}
+
+.jy-max-width-1000 {
+  max-width: 1000px;
+}
+
+.jy-max-width-1200 {
+  max-width: 1200px;
+}
+
+input {
+  margin-bottom: 5px;
+}
+
+a:not([href]) {
+  cursor: pointer;
+}
+
+.jy-selectable {
+  cursor: pointer;
+}
+
+body {
+  background-color: #fafafa;
+}
+
+.jy-ace-editor {
+  min-height: 400px;
+  width:100%;
+  overflow: auto;
+}
+
+.jy-max-height-500 {
+  max-height: 500px;
+}
+
+.jy-marker-1 {
+  position:absolute;
+  background:rgba(246,243,150,0.5);
+}
+
+.jy-marker-2 {
+  position:absolute;
+  background:rgba(165,207,79,0.5);
+}
+
+.jy-marker-3 {
+  position:absolute;
+  background:rgba(230,30,30,0.5);
+}
+
+.jy-marker-4 {
+  position:absolute;
+  background:rgba(245,163,199,0.5);
+}
+
+.jy-marker-5 {
+  position:absolute;
+  background:rgba(177,133,88,0.5);
+}
+
+.jy-marker-6 {
+  position:absolute;
+  background:rgba(124,151,206,0.5);
+}
+
+.jy-marker-7 {
+  position:absolute;
+  background:rgba(206,149,194,0.5);
+}
+
+.jy-marker-8 {
+  position:absolute;
+  background:rgba(243,112,34,0.5);
+}

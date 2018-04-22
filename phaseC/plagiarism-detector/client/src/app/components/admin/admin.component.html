@@ -1,0 +1,183 @@
+<div class="container-fluid jy-max-width-1000" *ngIf="currentUser && currentUser.role === 'Admin'; else elseBlock">
+
+  <h2>Administrator page</h2>
+
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="request-tab" data-toggle="tab" href="#requestTab">Pending Requests</a>
+    </li>
+    <li class="nav-item">
+      <a  class="nav-link" id="user-tab" data-toggle="tab" href="#userTab">Manage Users</a>
+    </li>
+    <li class="nav-item">
+      <a  class="nav-link" id="semester-tab" data-toggle="tab" href="#semesterTab">Manage Semesters</a>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="myTabContent">
+
+    <div class="tab-pane fade show active" id="requestTab">
+      <div class="table-responsive-sm">
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th scope="col">Operation</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of pendingUsers">
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.emailAddress}}</td>
+            <td>{{user.role}}</td>
+            <td>
+              <button (click)="approveUser(user)" class="btn btn-success">Approve</button>
+              <button (click)="rejectUser(user)" class="btn btn-danger">Reject</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade jy-max-width-700 mx-auto" id="userTab">
+      <button type="button" class="btn btn-primary btn-block my-2" data-toggle="modal" data-target="#newUserModel">Create user</button>
+      <ul class="list-inline">
+        <li class="list-inline-item mr-1"><h5>User list: </h5></li>
+        <li *ngFor="let user of users" class="list-inline-item mr-1">
+          <a class="text-primary h5" (click)="selectUser(user)">{{user.firstName}} | </a>
+        </li>
+      </ul>
+      <form class="jy-form" *ngIf="selectedUser">
+        <div class="form-group">
+          <label for="emailAddress">Email:</label>
+          <input type="text" class="form-control" name="emailAddress" id="emailAddress" [(ngModel)] = "selectedUser.emailAddress" disabled>
+        </div>
+        <!--<div class="form-group">-->
+          <!--<label for="password">Password:</label>-->
+          <!--<input type="text" class="form-control" name="password" id="password" [(ngModel)] = "selectedUser.password">-->
+        <!--</div>-->
+        <div class="form-group">
+          <label for="firstName">First Name:</label>
+          <input type="text" class="form-control" name="firstName" id="firstName" [(ngModel)] = "selectedUser.firstName">
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name:</label>
+          <input type="text" class="form-control" name="lastName" id="lastName" [(ngModel)] = "selectedUser.lastName">
+        </div>
+        <div class="form-group mb-2">
+          <label for="role">Role: </label>
+          <select class="form-control" id="role" name="role" [(ngModel)] = "selectedUser.role" required>
+            <option *ngFor="let r of roles" [value]="r">{{r}}</option>
+          </select>
+        </div>
+        <div class="form-group mb-2">
+          <label for="status">User Status: </label>
+          <select class="form-control" id="status" name="status" [(ngModel)] = "selectedUser.status" required>
+            <option *ngFor="let r of status" [value]="r">{{r}}</option>
+          </select>
+        </div>
+        <div *ngIf="updateMessageFlag" class="alert alert-success" role="alert">
+          {{updateMessage}}
+        </div>
+        <button (click)="updateUser()" class="btn btn-primary btn-block">Update User</button>
+        <button (click)="deleteUser()" class="btn btn-danger btn-block">Delete User</button>
+      </form>
+    </div>
+
+    <div class="tab-pane fade jy-max-width-700 mx-auto" id="semesterTab">
+      <button type="button" class="btn btn-primary btn-block my-2" data-toggle="modal" data-target="#newSemesterModel">New semester</button>
+      <ul class="list-inline">
+        <li class="list-inline-item mr-1"><h5>Semester list: </h5></li>
+        <li *ngFor="let s of semesters" class="list-inline-item mr-1">
+          <a class="text-primary h5" (click)="selectSemester(s)">{{s.name}} | </a>
+        </li>
+      </ul>
+      <form class="jy-form" *ngIf="selectedSemester">
+        <div class="form-group">
+          <label for="sName">Name:</label>
+          <input type="text" class="form-control" name="sName" id="sName" [(ngModel)] = "selectedSemester.name">
+        </div>
+        <div class="form-group mb-2">
+          <label for="sStatus">Status: </label>
+          <select class="form-control" id="sStatus" name="status" [(ngModel)] = "selectedSemester.status" required>
+            <option *ngFor="let r of semesterStatus" [value]="r">{{r}}</option>
+          </select>
+        </div>
+        <div *ngIf="updateMessageFlag" class="alert alert-success" role="alert">
+          {{updateMessage}}
+        </div>
+        <button (click)="updateSemester()" class="btn btn-primary btn-block">Update Semester</button>
+        <button (click)="deleteSemester()" class="btn btn-danger btn-block">Delete Semester</button>
+      </form>
+    </div>
+
+
+  </div>
+</div>
+
+<ng-template #elseBlock>
+  <h2>Unauthorized</h2>
+</ng-template>
+
+<div class="modal fade" id="newUserModel" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create new user</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #registerF="ngForm">
+          <input name="firstName" placeholder="First Name" type="text" class="form-control"
+                 required [(ngModel)] = "nfirstName"/>
+          <input name="lastName" placeholder="Last Name" type="text" class="form-control"
+                 required [(ngModel)] = "nlastName"/>
+          <input name="email" placeholder="email" type="text" class="form-control"
+                 required [(ngModel)] = "nemailAddress"/>
+          <input name="password1" placeholder="password" type="password" class="form-control"
+                 required [(ngModel)] = "npassword"/>
+          <div class="form-group">
+            <label for="nrole">Role</label>
+            <select class="form-control" id="nrole" name="role" [(ngModel)] = "nuserRole" required>
+              <option *ngFor="let r of roles" [value]="r">{{r}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="createUser()" [disabled]="!registerF.valid">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="newSemesterModel" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create new semester</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #semesterF="ngForm">
+          <input name="sName" placeholder="Semester Name" type="text" class="form-control"
+                 required [(ngModel)] = "nSemesterName"/>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="createSemester()" [disabled]="!semesterF.valid">Create</button>
+      </div>
+    </div>
+  </div>
+</div>

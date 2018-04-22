@@ -1,0 +1,92 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 text-center mb-4">
+      <h3 *ngIf="studentResults">Compare Type: {{studentResults[0].comparisonType}}</h3>
+    </div>
+    <div class="col-5">
+      <h5>Student List</h5>
+      <div *ngIf="studentResults">
+        <div class="table-responsive-sm">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr >
+              <th scope="col">Student 1</th>
+              <th scope="col">Student 2</th>
+              <th scope="col">Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="jy-selectable" *ngFor="let s of studentResults" [class.table-primary] = "selectedStudent === s" (click)="selectStudent(s)">
+              <td>{{s.student1Name}}</td>
+              <td>{{s.student2Name}}</td>
+              <td>
+                <div *ngIf="s.plagiarismExists; else notExist">
+                  <span class="text-danger">Plagiarism Found!</span>
+                  <button class="btn btn-sm btn-danger" (click)="notifyStudents(s)">Notify students</button>
+                </div>
+                <ng-template #notExist>
+                  <span class="text-success">No Plagiarism</span>
+                </ng-template>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-7">
+      <h5>File List</h5>
+      <div class="table-responsive-sm mx-auto" *ngIf="compareResults; else elseBlock">
+        <h5>Threshold used: {{compareResults[0].thresholdUsed}}</h5>
+
+        <table class="table table-bordered table-hover table-responsive">
+
+          <thead>
+          <tr>
+            <th scope="col">File 1</th>
+            <th scope="col">File 2</th>
+            <th scope="col">Average Score</th>
+            <th scope="col">View Detail</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let result of compareResults" [class.table-danger]="result.plagiarismExists === 'YES'" >
+            <td>{{result.file1Name}}</td>
+            <td>{{result.file2Name}}</td>
+            <td>{{result.averageScore}}</td>
+            <td>
+              <a (click)="viewDetail(result)"><i class="fa fa-external-link"></i></a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #elseBlock>
+        <div>
+          <h4 class="text-info">Select a pair of students to see file details</h4>
+        </div>
+      </ng-template>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade text-left" id="emailSentModel" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Emails have been successfully sent</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

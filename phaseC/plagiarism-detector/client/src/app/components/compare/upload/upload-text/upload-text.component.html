@@ -1,0 +1,74 @@
+<div class="container-fluid">
+
+  <div class="row mb-2">
+    <div class="col jy-max-width-1200 mx-auto text-center">
+      <h2 class="mb-2">Copy and paste two python files for comparison</h2>
+
+      <div class="row mb-2">
+        <div class="col-12 col-md-6">
+          <h5>File one</h5>
+          <div ace-editor class="jy-ace-editor" [(text)]="text1" [mode]="'python'" [theme]="'eclipse'"
+               id="editor1" [options]="options" [readOnly]="false" [autoUpdateContent]="true"></div>
+          <form #f1="ngForm" class="my-2">
+            <div class="form-group row">
+              <label for="student1" class="col-4 col-form-label">Student one</label>
+              <div class="col-8">
+                <select class="form-control" id="student1" name="student1" [(ngModel)] = "student1" required>
+                  <option *ngFor="let s of students" [ngValue]="s">{{s.firstName + ' ' + s.lastName}}</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <h5>File two</h5>
+          <div ace-editor class="jy-ace-editor" [(text)]="text2" [mode]="'python'" [theme]="'eclipse'"
+               id="editor2" [options]="options" [readOnly]="false" [autoUpdateContent]="true"></div>
+          <form #f2="ngForm" class="my-2">
+            <div class="form-group row">
+              <label for="student2" class="col-4 col-form-label">Student two</label>
+              <div class="col-8">
+                <select class="form-control" id="student2" name="student2" [(ngModel)] = "student2" required>
+                  <option *ngFor="let s of students" [ngValue]="s">{{s.firstName + ' ' + s.lastName}}</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col jy-max-width-700 mx-auto">
+          <form #sF="ngForm">
+            <div class="form-group">
+              <label for="strategy">Select compare strategy</label>
+              <select class="form-control" id="strategy" name="strategy" [(ngModel)] = "strategy" required>
+                <option *ngFor="let s of strategies" [ngValue]="s">{{s}}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div *ngIf="errorFlag" class="alert alert-danger">
+        {{errorMsg}}
+      </div>
+
+      <div class="row mb-4" *ngIf="resultDisplay">
+        <div class="col jy-max-width-1200 mx-auto text-center">
+          <h3>Compare complete</h3>
+          <!--<h3>Average score: {{compareResult.averageScore}}</h3>-->
+          <button class="btn btn-primary" (click)="viewDetail()">View Details</button>
+        </div>
+      </div>
+
+      <div class="row jy-max-width-700 mx-auto mb-4">
+        <button (click)="compare()" class="btn btn-primary btn-block" [disabled]="!f1.valid || !f2.valid || !sF.valid">Compare</button>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</div>
+

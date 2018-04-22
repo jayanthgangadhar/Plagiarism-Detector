@@ -1,0 +1,88 @@
+<div class="container-fluid">
+
+  <div class="row" *ngIf="user.status === 'ACTIVE'">
+    <div class="col text-center">
+      <h3>{{user.firstName + ' ' + user.lastName}}</h3>
+      <h6>{{'Email: ' + user.emailAddress}}</h6>
+      <h6>{{'Role: ' + user.role}}</h6>
+      <a *ngIf="user.role === 'Admin'" class="btn btn-primary" routerLink="/admin">Admin page</a>
+
+      <ul class="nav nav-tabs" id="myTab">
+
+        <li class="nav-item" *ngIf="user.role === 'Professor'">
+          <a class="nav-link" [class.active]="user.role === 'Professor'" id="prof-course-tab"
+             data-toggle="tab" href="#profCourse">My courses</a>
+        </li>
+        <li class="nav-item" *ngIf="user.role === 'Professor'">
+          <a (click)="profAssn.refreshCourses()" class="nav-link" id="prof-assignment-tab" data-toggle="tab" href="#profAssinment">Course Assignment</a>
+        </li>
+        <li class="nav-item" *ngIf="user.role === 'Student'">
+          <a  class="nav-link" [class.active]="user.role === 'Student'" id="student-course-tab"
+              data-toggle="tab" href="#enrolledCourse">My courses</a>
+        </li>
+        <li class="nav-item" *ngIf="user.role !== 'Admin'">
+          <a class="nav-link" id="about-tab" data-toggle="tab" href="#profile">Profile</a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade" [ngClass]="{'show': user.role === 'Professor', 'active': user.role === 'Professor'}" id="profCourse">
+          <app-prof-course *ngIf="user.role === 'Professor'"></app-prof-course>
+        </div>
+
+        <div class="tab-pane fade" id="profAssinment">
+          <app-prof-assignment #profAssn></app-prof-assignment>
+        </div>
+
+        <div class="tab-pane fade" id="enrolledCourse" [ngClass]="{'show': user.role === 'Student', 'active': user.role === 'Student'}">
+          <app-student-course *ngIf="user.role === 'Student'"></app-student-course>
+        </div>
+        <div class="tab-pane fade" id="profile">
+          <div>
+            <form class="jy-max-width-700 mx-auto text-left mt-4" *ngIf="user">
+              <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" class="form-control" name="firstName" id="firstName" [(ngModel)] = "user.firstName">
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" class="form-control" name="lastName" id="lastName" [(ngModel)] = "user.lastName">
+              </div>
+              <div class="form-group" *ngIf="user.role === 'Professor'">
+                <label for="threshold">Plagiarism threshold: {{user.threshold}}</label>
+                <input type="range" class="form-control-range" min="10" max="90" id="threshold" name="threshold" [(ngModel)] = "user.threshold">
+                <small id="thresholdHelpBlock" class="form-text text-muted">
+                  Set how tolerant to plagiarism. Files whose similarity scores are above this threshold will be marked as plagiarism.
+                </small>
+              </div>
+              <div *ngIf="updateMessageFlag" class="alert alert-success" role="alert">
+                {{updateMessage}}
+              </div>
+              <button (click)="updateUser()" class="btn btn-primary btn-block">Save</button>
+              <button (click)="logOut()" class="btn btn-danger btn-block">Log out</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="row" *ngIf="user.status === 'APPROVAL'">
+    <div class="col text-center">
+      <h3 class="mb-2">Your registration needs approval from system admin</h3>
+      <button (click)="logOut()" class="btn btn-danger">Log out</button>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="user.status === 'REJECTED'">
+    <div class="col text-center">
+      <h3 class="mb-2">Your registration has been rejected by system admin. Contact admin for details</h3>
+      <button (click)="logOut()" class="btn btn-danger">Log out</button>
+    </div>
+  </div>
+
+
+</div>

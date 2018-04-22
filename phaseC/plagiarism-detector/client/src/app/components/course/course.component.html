@@ -1,0 +1,42 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col jy-max-width-700 mx-auto">
+      <h3>Course Enrollment</h3>
+      <form>
+        <div class="form-group row">
+          <label for="sem" class="col-3 col-form-label">Select semester: </label>
+          <div class="col-4">
+            <select class="form-control" id="sem" name="sem" [(ngModel)] = "selectedSemester"
+                    (ngModelChange)="onChange($event)">
+              <option *ngFor="let sem of semesters" [ngValue]="sem">{{sem.name}}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+      <div *ngIf="courses">
+        <h5>Course List</h5>
+        <div class="table-responsive-sm">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">Course Name</th>
+              <th scope="col">Student Number</th>
+              <th scope="col">Operation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let c of courses">
+              <td>{{c.courseName}}</td>
+              <td>{{c.studentsEnrolled?.length}}</td>
+              <td>
+                  <button (click)="dropCourse(c)" class="btn btn-danger" *ngIf="enrolledCourses.indexOf(c._id) > -1">Drop</button>
+                  <button (click)="enrollCourse(c)" class="btn btn-primary" *ngIf="enrolledCourses.indexOf(c._id) === -1">Enroll</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

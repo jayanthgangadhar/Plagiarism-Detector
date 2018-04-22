@@ -1,0 +1,58 @@
+<div class="container-fluid">
+  <div class="row" *ngIf="assignment">
+    <div class="col jy-max-width-700 mx-auto text-center">
+      <div class="text-left"><a routerLink="/profile"><< Back to Courses</a></div>
+      <h4>Assignment: {{assignment.name}}</h4>
+      <p>Deadline: {{assignment.deadline}}</p>
+      <a [href]="assignment.documentUrl" target="_blank">
+        Document link: {{assignment.documentUrl}}</a>
+      <p>Submission type: {{assignment.submissionType}}</p>
+    </div>
+  </div>
+  <div class="row" *ngIf="submissions; else elseBlock">
+    <div class="col jy-max-width-700 mx-auto text-center">
+
+      <button class="btn btn-primary mb-2" (click)="compare()" [disabled]="isComparing">Compare all</button>
+      <button class="btn btn-primary mb-2" (click)="compareSelected()" [disabled]="submissionIds.length < 2 || isComparing">Compare Selected</button>
+      <p *ngIf="isComparing" class="text-info">Compare in process, please wait...</p>
+      <h5>Submission List</h5>
+      <div class="table-responsive-sm mx-auto text-left">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th scope="col">Select</th>
+            <th scope="col">Student Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Files</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let s of submissions" >
+            <td>
+              <input type="checkbox" (click)="selectSubmission(s)">
+            </td>
+            <td>{{s.studentName}}</td>
+            <td>{{s.submissionDate}}</td>
+            <td>
+              <ul>
+                <li *ngFor="let file of s.url">
+                  <a href="{{file.fileText2}}" target="_blank">{{file.fileText1}}</a>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <ng-template #elseBlock>
+  <div class="row">
+    <div class="col jy-max-width-700 mx-auto text-center">
+      <h4 class="text-info">No submissions</h4>
+    </div>
+  </div>
+</ng-template>
+
+</div>
+

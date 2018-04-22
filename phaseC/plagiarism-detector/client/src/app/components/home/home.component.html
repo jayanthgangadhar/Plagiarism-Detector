@@ -1,0 +1,122 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark trans">
+  <a class="navbar-brand" routerLink="{{homeLink}}">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+
+  <div class="collapse navbar-collapse" id="myNavbar" >
+    <ul class="navbar-nav " *ngIf="currentUser">
+      <li class="nav-item" [ngClass]="{'active': currentPath === '/compare'}" *ngIf="currentUser.role === 'Professor' && currentUser.status === 'ACTIVE'">
+        <a class="nav-link" routerLink="/compare">Compare</a>
+      </li>
+      <li class="nav-item dropdown" *ngIf="currentUser.role === 'Professor' && currentUser.status === 'ACTIVE'">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"></a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" routerLink="/upload/text">Text</a>
+          <a class="dropdown-item" routerLink="/upload/file">File</a>
+          <a class="dropdown-item" routerLink="/upload/folder">Folder</a>
+        </div>
+      </li>
+      <li class="nav-item" [ngClass]="{'active': currentPath === '/history'}" *ngIf="currentUser.role === 'Professor' && currentUser.status === 'ACTIVE'">
+        <a class="nav-link" routerLink="/history">History</a>
+      </li>
+      <li class="nav-item" [ngClass]="{'active': currentPath === '/courses'}" *ngIf="currentUser.role === 'Student'">
+        <a class="nav-link" routerLink="/courses">Courses</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto" *ngIf="!currentUser">
+      <li class="mr-1"><a class="nav-link" data-toggle="modal" data-target="#registerModel"><i class="fa fa-user"></i>  Sign Up</a></li>
+      <li><a class="nav-link" data-toggle="modal" data-target="#loginModel"><i class="fa fa-sign-in"></i>  Login</a></li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto" *ngIf="currentUser">
+      <!--<li><a routerLink="/profile" class="nav-link">{{currentUser?.firstName + ' ' + currentUser?.lastName}}</a></li>-->
+      <a (click)="logOut()" class="nav-link">Log out</a>
+    </ul>
+
+  </div>
+</nav>
+
+<div class="jumbotron jumbotron-fluid bg-img" *ngIf="currentPath === '/'">
+  <div class="container text-center title-text">
+    <h1 class="mt-4">Compare python source code.</h1>
+    <h1 class="mt-2">Detect plagiarism.</h1>
+  </div>
+</div>
+
+<div class="jy-below-nav">
+  <router-outlet></router-outlet>
+</div>
+<div class="modal fade" id="registerModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Register</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #registerF="ngForm">
+          <input name="firstName" placeholder="First Name" type="text" class="form-control"
+                 required [(ngModel)] = "firstName"/>
+          <input name="lastName" placeholder="Last Name" type="text" class="form-control"
+                 required [(ngModel)] = "lastName"/>
+          <input name="email" placeholder="email" type="email" class="form-control"
+                 required [(ngModel)] = "emailAddress" email/>
+          <input name="password1" placeholder="password" type="password" class="form-control"
+                 required [(ngModel)] = "password1"/>
+          <input name="password2" placeholder="verify password" type="password" class="form-control"
+                 required [(ngModel)] = "password2"/>
+          <div class="form-group">
+            <label for="role">Role</label>
+            <select class="form-control" id="role" name="role" [(ngModel)] = "userRole" required>
+              <option *ngFor="let r of roles" [value]="r">{{r}}</option>
+            </select>
+          </div>
+          <div *ngIf="errorFlag" class="alert alert-danger">
+            {{errorMsg}}
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="register()" [disabled]="!registerF.valid">Register</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="loginModel" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="loginErrorFlag" class="alert alert-danger">
+          {{loginErrorMsg}}
+        </div>
+
+        <form #f="ngForm">
+          <input placeholder="email" name="email" type="text" class="form-control" [(ngModel)] = "loginEmail" required
+                 #ue="ngModel"/>
+          <span class="help-block" *ngIf="!ue.valid && ue.touched">Please enter email!</span>
+
+          <input placeholder="password" name="password" type="password" class="form-control" [(ngModel)] = "loginPass" required
+                 #pw="ngModel"/>
+          <span class="help-block" *ngIf="!pw.valid && pw.touched">Please enter password!</span>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="login()" [disabled]="!f.valid">Login</button>
+      </div>
+    </div>
+  </div>
+</div>

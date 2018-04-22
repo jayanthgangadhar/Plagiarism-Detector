@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>edu.neu.cs5500</groupId>
+	<artifactId>plagiarism-detector</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>plagiarism-detector</name>
+	<description>Plagiarism detection tool for Python source code</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.10.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+
+	<!-- MAVEN DEPENDENCIES -->
+	<dependencies>
+		<!-- Spring started dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Email module dependencies -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.23.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.oauth-client/google-oauth-client-jetty -->
+		<dependency>
+			<groupId>com.google.oauth-client</groupId>
+			<artifactId>google-oauth-client-jetty</artifactId>
+			<version>1.23.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-gmail -->
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-gmail</artifactId>
+			<version>v1-rev83-1.23.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.parser</groupId>
+			<artifactId>parser</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>it.zielke</groupId>
+			<artifactId>moji</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4-runtime</artifactId>
+			<version>4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.11.304</version>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.11.106</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/de.svenkubiak/jBCrypt -->
+		<dependency>
+			<groupId>de.svenkubiak</groupId>
+			<artifactId>jBCrypt</artifactId>
+			<version>0.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mindrot</groupId>
+			<artifactId>jbcrypt</artifactId>
+			<version>0.3m</version>
+		</dependency>
+
+	</dependencies>
+
+	<!-- Build Execution resources and plugins -->
+	<build>
+		<plugins>
+
+			<!-- Maven Plugin -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!-- Coverage report plugin -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.9</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>false</skipTests>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>localRepository</id>
+			<url>file://${project.basedir}/lib</url>
+		</repository>
+		<repository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>https://repo.spring.io/libs-release</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>https://repo.spring.io/libs-release</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<tomcat.version>8.5.27</tomcat.version>
+		<sonar.exclusions>src/main/java/edu/neu/cs5500/PlagiarismDetectorApplication.java,src/main/java/edu/neu/cs5500/ServletInitializer.java,src/main/java/edu/neu/cs5500/aop/*.java,src/main/java/edu/neu/cs5500/storage/*.java,src/main/java/edu/neu/cs5500/utils/*.java,src/main/java/edu/neu/cs5500/dao/*/*.java,src/main/java/edu/neu/cs5500/services/file/*.java,src/main/java/edu/neu/cs5500/services/report/ReportServiceImpl.java,src/main/java/edu/neu/cs5500/services/email/*.java,src/main/java/edu/neu/cs5500/domainObjects/*.java,src/main/java/edu/neu/cs5500/comparisonEngine/editdistance/EditBasedDist.java,src/main/java/edu/neu/cs5500/comparisonEngine/strategy/FileComparisonEngine.java,src/main/java/edu/neu/cs5500/comparisonEngine/lineSimilarity/LineSimilarity.java,src/main/java/edu/neu/cs5500/comparisonEngine/approxlib/*.java,src/main/java/edu/neu/cs5500/scheduler/ComparisonScheduler.java,src/main/java/edu/neu/cs5500/controllers/FileController.java,src/main/java/edu/neu/cs5500/controllers/SubmissionController.java,src/main/java/edu/neu/cs5500/controllers/EmailController.java</sonar.exclusions>
+		<sonar.coverage.exclusions>src/main/java/edu/neu/cs5500/PlagiarismDetectorApplication.java,src/main/java/edu/neu/cs5500/ServletInitializer.java,src/main/java/edu/neu/cs5500/aop/*.java,src/main/java/edu/neu/cs5500/storage/*.java,src/main/java/edu/neu/cs5500/utils/*.java,src/main/java/edu/neu/cs5500/dao/*/*.java,src/main/java/edu/neu/cs5500/services/file/*.java,src/main/java/edu/neu/cs5500/services/report/ReportServiceImpl.java,src/main/java/edu/neu/cs5500/services/email/*.java,src/main/java/edu/neu/cs5500/domainObjects/*.java,src/main/java/edu/neu/cs5500/comparisonEngine/editdistance/EditBasedDist.java,src/main/java/edu/neu/cs5500/comparisonEngine/strategy/FileComparisonEngine.java,src/main/java/edu/neu/cs5500/comparisonEngine/lineSimilarity/LineSimilarity.java,src/main/java/edu/neu/cs5500/comparisonEngine/approxlib/*.java,src/main/java/edu/neu/cs5500/scheduler/ComparisonScheduler.java,src/main/java/edu/neu/cs5500/controllers/FileController.java,src/main/java/edu/neu/cs5500/controllers/SubmissionController.java,src/main/java/edu/neu/cs5500/controllers/EmailController.java</sonar.coverage.exclusions>
+	</properties>
+
+</project>

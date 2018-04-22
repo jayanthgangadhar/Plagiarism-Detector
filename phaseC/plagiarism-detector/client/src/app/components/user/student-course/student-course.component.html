@@ -1,0 +1,100 @@
+<div class="row mt-4">
+  <div class="col-3">
+    <h4>Enrolled Courses</h4>
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let c of courses"
+          (click)="selectCourse(c)" [class.active] = "selectedCourse == c">
+        {{c.courseName}}
+      </li>
+    </ul>
+    <button class="btn btn-primary my-3" routerLink="/courses">Course enroll</button>
+  </div>
+
+  <div class="col-4" *ngIf="selectedCourse; else elseBlock">
+    <h4>Course assignments</h4>
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let a of assignments"
+          (click)="selectAssignment(a)" [class.active] = "selectedAssignment == a">
+        {{a.name}}
+      </li>
+    </ul>
+  </div>
+  <ng-template #elseBlock>
+    <div class="col-4">
+      <h4 class="text-info">No Course Selected</h4>
+    </div>
+  </ng-template>
+
+  <div class="col-5" *ngIf="selectedAssignment; else aelseBlock">
+    <h4>Assignment: {{selectedAssignment.name}}</h4>
+    <p>Deadline: {{selectedAssignment.deadline}}</p>
+    <a [href]="selectedAssignment.documentUrl" target="_blank">
+      Document link: {{selectedAssignment.documentUrl}}</a>
+    <b>Accepted submission type: {{selectedAssignment.submissionType}}</b>
+    <div *ngIf="submittedAssnId.indexOf(selectedAssignment._id) > -1">
+      <p class="text-success">Already submitted</p>
+    </div>
+    <div *ngIf="submittedAssnId.indexOf(selectedAssignment._id) == -1">
+      <button class="btn btn-primary" (click)="submit()">Submit</button>
+    </div>
+  </div>
+  <ng-template #aelseBlock>
+    <div class="col-5">
+      <h4 class="text-info">No Assignment Selected</h4>
+    </div>
+  </ng-template>
+
+</div>
+
+<div class="modal fade text-left" id="uploadFileModel" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Select a single python file</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #fileF="ngForm">
+          <input (change)=fileEvent($event) name="file" type="file" class="form-control"
+                  id="file" accept=".py" required>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="uploadFile()" [disabled]="!file">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade text-left" id="uploadFolderModel" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Select your python project folder</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #folderF="ngForm">
+          <div class="form-group">
+            <label class="btn btn-secondary" for="fileList">Select Folder</label>
+            <input (change)=fileEvent($event) name="fileList" type="file" class="form-control"
+                   id="fileList" accept=".py" webkitdirectory directory multiple hidden required>
+          </div>
+        </form>
+        <p *ngIf="fileList && fileList.length > 0">{{fileList.length + ' files selected'}}</p>
+        <div *ngIf="errorFlag" class="alert alert-danger">
+          {{errorMsg}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="uploadFolder()" [disabled]="fileList.length == 0">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>

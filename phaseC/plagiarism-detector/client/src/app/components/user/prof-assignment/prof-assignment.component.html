@@ -1,0 +1,129 @@
+<div class="row mt-4">
+  <div class="col-3">
+    <h4>Courses</h4>
+    <ul class="list-group">
+      <li class="list-group-item jy-selectable" *ngFor="let c of courses"
+          (click)="selectCourse(c)" [class.active] = "selectedCourse == c">
+        {{c.courseName}}
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-4" *ngIf="selectedCourse; else elseBlock">
+    <h4>Assignments</h4>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <b>Assignment Name</b>
+        <b>Edit</b>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let a of assignments"
+          (click)="selectAssignment(a)" [class.active] = "selectedAssignment == a">
+        {{a.name}}
+        <a (click)="editAssignment(a)"><i class="fa fa-cog"></i></a>
+      </li>
+    </ul>
+    <button type="button" class="btn btn-primary my-2"
+            data-toggle="modal" data-target="#newAssnModel">Create Assignment</button>
+  </div>
+  <ng-template #elseBlock>
+    <div class="col-4">
+      <h4 class="text-info">No Course Selected</h4>
+    </div>
+  </ng-template>
+
+  <div class="col-5" *ngIf="selectedAssignment; else aelseBlock">
+    <h4>Assignment: {{selectedAssignment.name}}</h4>
+    <p>Deadline: {{selectedAssignment.deadline}}</p>
+    <a [href]="selectedAssignment.documentUrl" target="_blank">
+      Document link: {{selectedAssignment.documentUrl}}</a>
+    <p>Submission type: {{selectedAssignment.submissionType}}</p>
+    <a class="text-primary" (click)="viewSubmission()">View submissions</a>
+  </div>
+  <ng-template #aelseBlock>
+    <div class="col-5">
+      <h4 class="text-info">No Assignment Selected</h4>
+    </div>
+  </ng-template>
+
+</div>
+
+<div class="modal fade text-left" id="newAssnModel" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create new assignment</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #assnF="ngForm">
+          <div class="form-group">
+            <label for="aName">Assignment Name</label>
+            <input name="aName" type="text" class="form-control" id="aName" required [(ngModel)] = "nAssnName"/>
+          </div>
+          <div class="form-group">
+            <label for="aDoc">Assignment Doc Link</label>
+            <input name="aDoc" type="text" class="form-control" id="aDoc" required [(ngModel)] = "nAssnDoc"/>
+          </div>
+          <div class="form-group">
+            <label for="aType">Submission Type</label>
+            <select class="form-control" id="aType" name="aType" [(ngModel)] = "nAssnType" required>
+              <option *ngFor="let t of sTypes" [value]="t">{{t}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="aDeadline">Assignment Deadline</label>
+            <input name="aDeadline" type="date" class="form-control" id="aDeadline" required [(ngModel)] = "nAssnDeadline"/>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="createAssignment()" [disabled]="!assnF.valid">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade text-left" id="editAssnModel" tabindex="-1" role="dialog" *ngIf="editingAssignment">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit assignment</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #assneF="ngForm">
+          <div class="form-group">
+            <label for="aeName">Assignment Name</label>
+            <input name="aeName" type="text" class="form-control" id="aeName" required [(ngModel)] = "editingAssignment.name"/>
+          </div>
+          <div class="form-group">
+            <label for="aeDoc">Assignment Doc Link</label>
+            <input name="aeDoc" type="text" class="form-control" id="aeDoc" required [(ngModel)] = "editingAssignment.documentUrl"/>
+          </div>
+          <div class="form-group">
+            <label for="aeType">Submission Type</label>
+            <select class="form-control" id="aeType" name="aeType" [(ngModel)] = "editingAssignment.submissionType" required>
+              <option *ngFor="let t of sTypes" [value]="t">{{t}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="aeDeadline">Assignment Deadline</label>
+            <input name="aeDeadline" type="date" class="form-control" id="aeDeadline" required [(ngModel)] = "editingAssignment.deadline"/>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="updateMessageFlag" class="alert alert-success mx-2" role="alert">
+        {{updateMessage}}
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-danger" data-dismiss="modal" (click)="deleteAssignment()">Delete</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="updateAssignment()" [disabled]="!assneF.valid">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
